@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-//  database.php  — Va en la raíz de apimatriculas\
+// api/database.php — Configuración de la base de datos
 // ============================================================
 
 define('DB_HOST', 'localhost');

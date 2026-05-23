@@ -10,7 +10,7 @@
     :root {
       --verde:#4a7c25; --verde-dark:#3a5a1e; --verde-light:#a8d060;
       --verde-bg:#f0f7e8; --gris-bg:#f4f6f8; --gris-borde:#e0e4ea;
-      --texto:#1a2530; --texto-sub:#5a6a78; --blanco:#ffffff;
+      --texto:#1a2530; --texto-sub:#5a6a78;
       --sombra: 0 2px 12px rgba(0,0,0,.07);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,25 +21,19 @@
     /* Bienvenida */
     .bienvenida {
       background: linear-gradient(135deg, var(--verde) 0%, var(--verde-dark) 100%);
-      border-radius: 18px;
-      padding: 28px 32px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-radius: 18px; padding: 28px 32px;
+      color: white; display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 24px;
       box-shadow: 0 6px 24px rgba(74,124,37,.3);
     }
-    .bien-titulo { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
-    .bien-sub    { font-size: 14px; opacity: .75; }
-    .bien-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .bien-titulo  { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+    .bien-sub     { font-size: 14px; opacity: .75; }
+    .bien-badges  { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
     .badge {
       background: rgba(255,255,255,.15);
       border: 1px solid rgba(255,255,255,.2);
-      border-radius: 99px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-weight: 500;
+      border-radius: 99px; padding: 6px 14px;
+      font-size: 12px; font-weight: 500;
     }
     .promedio-circulo {
       width: 88px; height: 88px;
@@ -53,17 +47,14 @@
     .promedio-num { font-size: 26px; font-weight: 700; line-height: 1; }
     .promedio-lbl { font-size: 10px; opacity: .7; }
 
-    /* Grid de stats */
+    /* Stats */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 14px; margin-bottom: 24px;
     }
     .stat-card {
-      background: white;
-      border-radius: 14px;
-      padding: 20px;
+      background: white; border-radius: 14px; padding: 20px;
       box-shadow: var(--sombra);
       border-top: 3px solid var(--verde-light);
     }
@@ -79,19 +70,13 @@
     .accesos {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
-      margin-bottom: 28px;
+      gap: 14px; margin-bottom: 28px;
     }
     .acceso-card {
-      background: white;
-      border-radius: 14px;
-      padding: 22px;
+      background: white; border-radius: 14px; padding: 22px;
       box-shadow: var(--sombra);
-      text-decoration: none;
-      color: var(--texto);
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      text-decoration: none; color: var(--texto);
+      display: flex; align-items: center; gap: 16px;
       transition: transform .15s, box-shadow .15s;
       border: 1.5px solid transparent;
     }
@@ -102,11 +87,9 @@
     }
     .acceso-icon {
       width: 50px; height: 50px;
-      background: var(--verde-bg);
-      border-radius: 14px;
+      background: var(--verde-bg); border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
+      font-size: 22px; flex-shrink: 0;
     }
     .acceso-nombre { font-size: 15px; font-weight: 600; }
     .acceso-desc   { font-size: 12px; color: var(--texto-sub); margin-top: 3px; }
@@ -115,49 +98,41 @@
     /* Materias inscritas */
     .mat-lista { display: flex; flex-direction: column; gap: 10px; }
     .mat-item {
-      background: white;
-      border-radius: 12px;
-      padding: 14px 18px;
+      background: white; border-radius: 12px; padding: 14px 18px;
       box-shadow: var(--sombra);
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
     }
-    .mat-dot  { width: 10px; height: 10px; border-radius: 50%; background: var(--verde); flex-shrink: 0; }
+    .mat-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--verde); flex-shrink: 0; }
     .mat-nombre { font-weight: 600; font-size: 14px; }
     .mat-info   { font-size: 12px; color: var(--texto-sub); margin-top: 2px; }
-    .mat-cred   {
+    .mat-cred {
       margin-left: auto;
-      background: var(--verde-bg);
-      color: var(--verde);
+      background: var(--verde-bg); color: var(--verde);
       font-size: 12px; font-weight: 700;
-      padding: 3px 10px; border-radius: 99px;
-      white-space: nowrap;
+      padding: 3px 10px; border-radius: 99px; white-space: nowrap;
     }
+
     .empty-msg { text-align:center; padding: 32px; color: var(--texto-sub); font-size: 13px; }
     .empty-msg a { color: var(--verde); font-weight: 600; }
 
-    /* FIX: error-msg para cuando falla la API */
     .error-api {
-      background: #fff3e0;
-      color: #bf360c;
+      background: #fff3e0; color: #bf360c;
       border: 1px solid #ffcc80;
-      border-radius: 10px;
-      padding: 14px 18px;
-      font-size: 13px;
-      line-height: 1.5;
+      border-radius: 10px; padding: 14px 18px; font-size: 13px; line-height: 1.5;
     }
     .error-api strong { display: block; margin-bottom: 4px; }
 
     .spinner {
-      width: 24px; height: 24px; border: 3px solid #e0e4ea;
-      border-top-color: var(--verde); border-radius: 50%;
+      width: 24px; height: 24px;
+      border: 3px solid #e0e4ea; border-top-color: var(--verde);
+      border-radius: 50%;
       animation: spin .7s linear infinite; margin: 24px auto;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
 <?php include 'nav.php'; ?>
 
 <div class="page">
@@ -173,7 +148,7 @@
         <span class="badge" id="badge-id"></span>
       </div>
     </div>
-    <div class="promedio-circulo" id="promedio-wrap">
+    <div class="promedio-circulo">
       <div class="promedio-num" id="promedio-num">—</div>
       <div class="promedio-lbl">Promedio</div>
     </div>
@@ -181,9 +156,7 @@
 
   <!-- Stats -->
   <div class="stats-grid" id="stats-grid">
-    <div class="stat-card">
-      <div class="spinner"></div>
-    </div>
+    <div class="stat-card"><div class="spinner"></div></div>
   </div>
 
   <!-- Accesos rápidos -->
@@ -214,47 +187,36 @@
 </div>
 
 <script>
-  // ── FIX PRINCIPAL: verificar sesión antes de cualquier otra cosa ──
+  // Verificar sesión
   const estId = sessionStorage.getItem('estudiante_id');
-  if (!estId) {
-    window.location.replace('index.php');
-  }
+  if (!estId) window.location.replace('login.php');
 
-  // Leer datos de sessionStorage (guardados en index.php mejorado)
-  const nombre   = sessionStorage.getItem('estudiante_nombre')   || '';
-  const codigo   = sessionStorage.getItem('estudiante_codigo')   || '';
+  // Poblar bienvenida inmediatamente desde sessionStorage
+  const nombre   = sessionStorage.getItem('estudiante_nombre') || '';
+  const codigo   = sessionStorage.getItem('estudiante_codigo') || '';
   const programa = sessionStorage.getItem('estudiante_programa') || '';
   const semestre = sessionStorage.getItem('estudiante_semestre') || '';
   const promedio = sessionStorage.getItem('estudiante_promedio') || '—';
 
-  // Poblar bienvenida inmediatamente con datos de sesión (sin esperar API)
-  document.getElementById('bien-titulo').textContent   = '¡Hola, ' + (nombre.split(' ')[0] || nombre) + '!';
-  document.getElementById('bien-sub').textContent      = nombre + (programa ? ' · ' + programa : '');
+  document.getElementById('bien-titulo').textContent  = '¡Hola, ' + (nombre.split(' ')[0] || nombre) + '!';
+  document.getElementById('bien-sub').textContent     = nombre + (programa ? ' · ' + programa : '');
   document.getElementById('badge-programa').textContent = programa || 'Sin programa';
-  document.getElementById('badge-id').textContent      = 'Código: ' + codigo;
-  document.getElementById('promedio-num').textContent  = promedio || '—';
-  if (semestre) {
-    document.getElementById('badge-semestre').textContent = 'Semestre ' + semestre;
-  }
+  document.getElementById('badge-id').textContent       = 'Código: ' + codigo;
+  document.getElementById('promedio-num').textContent   = promedio || '—';
+  if (semestre) document.getElementById('badge-semestre').textContent = 'Semestre ' + semestre;
 
-  // ── Función de error reutilizable ──
   function mostrarErrorStats(msg) {
     document.getElementById('stats-grid').innerHTML =
       `<div class="error-api"><strong>⚠️ No se pudieron cargar las estadísticas</strong>${msg}</div>`;
   }
-
   function mostrarErrorMaterias(msg) {
     document.getElementById('mat-lista').innerHTML =
       `<div class="error-api"><strong>⚠️ No se pudieron cargar las materias</strong>${msg}
-       <br><a href="index.php" style="color:#bf360c;font-weight:600">Volver al inicio →</a></div>`;
+       <br><a href="login.php" style="color:#bf360c;font-weight:600">Volver al login →</a></div>`;
   }
 
-  // ── Cargar datos desde la API ──
-  fetch('resumen.php?estudiante_id=' + estId + '&api=1')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
+  fetch('api/resumen.php?estudiante_id=' + estId + '&api=1')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => {
       if (!data.success) {
         mostrarErrorStats(data.error || 'Error desconocido.');
@@ -265,11 +227,9 @@
       const e  = data.estudiante;
       const cr = data.resumen_creditos;
 
-      // Actualizar promedio y semestre con datos frescos de BD
-      document.getElementById('promedio-num').textContent    = e.promedio;
-      document.getElementById('badge-semestre').textContent  = 'Semestre ' + e.semestre;
+      document.getElementById('promedio-num').textContent          = e.promedio;
+      document.getElementById('badge-semestre').textContent        = 'Semestre ' + e.semestre;
 
-      // Stats cards
       document.getElementById('stats-grid').innerHTML = `
         <div class="stat-card">
           <div class="stat-num">${data.total_materias}</div>
@@ -286,10 +246,8 @@
         <div class="stat-card">
           <div class="stat-num">${e.promedio}</div>
           <div class="stat-label">Promedio acumulado</div>
-        </div>
-      `;
+        </div>`;
 
-      // Lista de materias
       const lista = document.getElementById('mat-lista');
       if (!data.materias_inscritas.length) {
         lista.innerHTML = '<div class="empty-msg">Aún no tienes materias inscritas. <a href="inscripcion.php">Ir a inscripción →</a></div>';
@@ -309,11 +267,10 @@
         }).join('') + '</div>';
     })
     .catch(err => {
-      // FIX: ambos spinners se reemplazan con mensaje de error
       const esRed = err.message && err.message.includes('fetch');
       const msg = esRed
         ? 'No se pudo conectar. Verifica que Laragon/XAMPP esté activo y MySQL encendido.'
-        : 'Error al procesar la respuesta del servidor. Revisa que la base de datos <code>uts_matriculas</code> exista.';
+        : 'Error al procesar la respuesta del servidor. Revisa que la BD <code>uts_matriculas</code> exista.';
       mostrarErrorStats(msg);
       mostrarErrorMaterias(msg);
     });

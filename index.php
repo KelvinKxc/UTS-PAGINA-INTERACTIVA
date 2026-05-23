@@ -3,320 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UTS — Iniciar Sesión</title>
+  <title>UTS — Bienvenido</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --verde:      #4a7c25;
-      --verde-dark: #3a5a1e;
-      --verde-light:#a8d060;
-      --verde-bg:   #f0f7e8;
-      --gris-bg:    #f4f6f8;
-      --gris-borde: #e0e4ea;
-      --texto:      #1a2530;
-      --texto-sub:  #5a6a78;
-      --error:      #c62828;
+      --verde:       #4a7c25;
+      --verde-dark:  #3a5a1e;
+      --verde-light: #a8d060;
+      --verde-bg:    #f0f7e8;
+      --gris-bg:     #f4f6f8;
+      --gris-borde:  #e0e4ea;
+      --texto:       #1a2530;
+      --texto-sub:   #5a6a78;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--gris-bg);
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
     }
 
-    .login-wrap {
-      width: 100%;
-      max-width: 420px;
-      padding: 16px;
-    }
-
-    .logo-area {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    .logo-circle {
-      width: 64px; height: 64px;
-      background: var(--verde);
-      border-radius: 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 700;
-      color: white;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 24px rgba(74,124,37,.3);
-    }
-    .logo-nombre { font-size: 22px; font-weight: 700; color: var(--texto); }
-    .logo-sub    { font-size: 13px; color: var(--texto-sub); margin-top: 4px; }
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 4px 24px rgba(0,0,0,.08);
-    }
-    .card-titulo {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--texto);
-      margin-bottom: 6px;
-    }
-    .card-sub {
-      font-size: 13px;
-      color: var(--texto-sub);
-      margin-bottom: 24px;
-    }
-
-    .form-group { margin-bottom: 18px; }
-    .form-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--texto-sub);
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      margin-bottom: 7px;
-    }
-    .form-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--gris-borde);
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--texto);
-      outline: none;
-      transition: border-color .15s;
-    }
-    .form-input:focus { border-color: var(--verde); }
-    .form-input.input-error { border-color: var(--error); }
-
-    .btn-login {
-      width: 100%;
-      padding: 13px;
-      background: var(--verde);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .15s, transform .1s;
-      margin-top: 4px;
+    /* ── NAV ── */
+    .topbar {
+      background: var(--verde-dark);
+      padding: 0 32px;
+      height: 58px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      justify-content: space-between;
     }
-    .btn-login:hover  { background: var(--verde-dark); }
-    .btn-login:active { transform: scale(.98); }
-    .btn-login:disabled { opacity: .6; cursor: not-allowed; }
-
-    .spinner-btn {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-      display: none;
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error-msg {
-      background: #ffebee;
-      color: var(--error);
-      border: 1px solid #ffcdd2;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-bottom: 16px;
-      display: none;
+    .topbar-logo {
+      width: 36px; height: 36px;
+      background: var(--verde-light);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; color: var(--verde-dark);
     }
-
-    /* ── FIX: Banner de error de BD ── */
-    .alert-bd {
-      background: #fff3e0;
-      color: #bf360c;
-      border: 1px solid #ffcc80;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 13px;
-      margin-bottom: 16px;
-      display: none;
-      line-height: 1.5;
-    }
-    .alert-bd strong { display: block; margin-bottom: 4px; }
-
-    .demo-hint {
-      background: var(--verde-bg);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-top: 20px;
-      font-size: 12px;
+    .topbar-name { color: white; font-size: 15px; font-weight: 600; }
+    .topbar-btn {
+      background: var(--verde-light);
       color: var(--verde-dark);
+      border: none; border-radius: 8px;
+      padding: 8px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity .15s;
     }
-    .demo-hint strong { display: block; margin-bottom: 4px; }
-    .demo-hint code {
-      font-family: 'DM Mono', monospace;
-      background: white;
-      padding: 1px 5px;
-      border-radius: 4px;
-    }
+    .topbar-btn:hover { opacity: .85; }
 
-    .footer-uts {
+    /* ── HERO ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      font-size: 11px;
+      padding: 60px 24px;
+    }
+    .hero-badge {
+      background: var(--verde-bg);
+      color: var(--verde);
+      border: 1px solid rgba(74,124,37,.2);
+      border-radius: 99px;
+      padding: 5px 16px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .3px;
+      margin-bottom: 28px;
+    }
+    .hero-titulo {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.15;
+      max-width: 640px;
+      margin-bottom: 18px;
+    }
+    .hero-titulo span { color: var(--verde); }
+    .hero-sub {
+      font-size: 16px;
       color: var(--texto-sub);
-      margin-top: 20px;
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      background: var(--verde);
+      color: white;
+      border: none; border-radius: 12px;
+      padding: 15px 36px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s, transform .1s;
+      box-shadow: 0 6px 20px rgba(74,124,37,.3);
+    }
+    .btn-primary:hover { background: var(--verde-dark); transform: translateY(-2px); }
+    .btn-primary:active { transform: scale(.97); }
+    .btn-secondary {
+      background: white;
+      color: var(--verde);
+      border: 1.5px solid var(--verde-light);
+      border-radius: 12px;
+      padding: 15px 36px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px; font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s;
+    }
+    .btn-secondary:hover { background: var(--verde-bg); }
+
+    /* ── FEATURES ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+      max-width: 860px;
+      width: 100%;
+      margin-top: 64px;
+      padding: 0 8px;
+    }
+    .feat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.07);
+      text-align: left;
+    }
+    .feat-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .feat-titulo { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--texto); }
+    .feat-desc { font-size: 13px; color: var(--texto-sub); line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--texto-sub);
+      border-top: 1px solid var(--gris-borde);
     }
   </style>
 </head>
 <body>
 
-<div class="login-wrap">
-  <div class="logo-area">
-    <div class="logo-circle">UTS</div>
-    <div class="logo-nombre">Sistema Estudiantil</div>
-    <div class="logo-sub">Unidades Tecnológicas de Santander</div>
-  </div>
+  <!-- Barra superior -->
+  <nav class="topbar">
+    <a class="topbar-brand" href="index.php">
+      <div class="topbar-logo">UTS</div>
+      <span class="topbar-name">Sistema Estudiantil</span>
+    </a>
+    <a class="topbar-btn" href="login.php">Iniciar sesión →</a>
+  </nav>
 
-  <div class="card">
-    <div class="card-titulo">Iniciar sesión</div>
-    <div class="card-sub">Ingresa tu código y contraseña para continuar</div>
+  <!-- Hero -->
+  <main class="hero">
+    <div class="hero-badge">📚 Semestre 2026-1 · Sistema de Matrículas</div>
 
-    <!-- FIX: alerta específica para error de BD -->
-    <div class="alert-bd" id="alert-bd">
-      <strong>⚠️ Error de conexión con la base de datos</strong>
-      Verifica que MySQL esté activo en Laragon/XAMPP y que la base de datos
-      <code>uts_matriculas</code> exista.
+    <h1 class="hero-titulo">
+      Bienvenido al portal de<br>
+      <span>Unidades Tecnológicas<br>de Santander</span>
+    </h1>
+
+    <p class="hero-sub">
+      Gestiona tu inscripción de materias, consulta tu horario y revisa tu resumen académico desde un solo lugar.
+    </p>
+
+    <div class="hero-btns">
+      <a class="btn-primary" href="login.php">🔐 Iniciar sesión</a>
+      <a class="btn-secondary" href="#features">Ver funciones ↓</a>
     </div>
 
-    <div class="error-msg" id="error-msg"></div>
-
-    <div class="form-group">
-      <label class="form-label" for="codigo">Código estudiantil</label>
-      <input class="form-input" id="codigo" type="text" placeholder="Ej: 1005678" autocomplete="username">
+    <!-- Features -->
+    <div class="features" id="features">
+      <div class="feat-card">
+        <div class="feat-icon">🔐</div>
+        <div class="feat-titulo">Acceso seguro</div>
+        <div class="feat-desc">Ingresa con tu código estudiantil y contraseña asignada por la institución.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📋</div>
+        <div class="feat-titulo">Inscripción de materias</div>
+        <div class="feat-desc">Consulta las materias disponibles, revisa cupos y horarios, e inscríbete fácilmente.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-titulo">Resumen académico</div>
+        <div class="feat-desc">Ve tus materias inscritas, créditos acumulados y promedio en tiempo real.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-titulo">Rápido y sin papel</div>
+        <div class="feat-desc">Todo el proceso de matrícula desde tu computador o celular, sin filas.</div>
+      </div>
     </div>
-    <div class="form-group">
-      <label class="form-label" for="password">Contraseña</label>
-      <input class="form-input" id="password" type="password" placeholder="••••••••" autocomplete="current-password">
-    </div>
+  </main>
 
-    <button class="btn-login" id="btn-login" onclick="login()">
-      <span class="spinner-btn" id="spinner-btn"></span>
-      <span id="btn-texto">Ingresar</span>
-    </button>
+  <footer>
+    © 2026 Unidades Tecnológicas de Santander — Sistema Estudiantil
+  </footer>
 
-    <div class="demo-hint">
-      <strong>🧪 Datos de prueba:</strong>
-      Código: <code>1005678</code> &nbsp;|&nbsp; Contraseña: <code>1234</code>
-    </div>
-  </div>
-
-  <div class="footer-uts">© 2026 Unidades Tecnológicas de Santander</div>
-</div>
-
-<script>
-  // Si ya hay sesión activa, redirigir a home
-  if (sessionStorage.getItem('estudiante_id')) {
-    window.location.href = 'home.php';
-  }
-
-  function mostrarError(msg) {
-    const div = document.getElementById('error-msg');
-    div.textContent = msg;
-    div.style.display = 'block';
-  }
-
-  function ocultarErrores() {
-    document.getElementById('error-msg').style.display = 'none';
-    document.getElementById('alert-bd').style.display  = 'none';
-    document.getElementById('codigo').classList.remove('input-error');
-    document.getElementById('password').classList.remove('input-error');
-  }
-
-  function setBtnCargando(cargando) {
-    const btn     = document.getElementById('btn-login');
-    const spinner = document.getElementById('spinner-btn');
-    const texto   = document.getElementById('btn-texto');
-    btn.disabled          = cargando;
-    spinner.style.display = cargando ? 'block' : 'none';
-    texto.textContent     = cargando ? 'Verificando...' : 'Ingresar';
-  }
-
-  async function login() {
-    const codigo = document.getElementById('codigo').value.trim();
-    const pass   = document.getElementById('password').value.trim();
-
-    ocultarErrores();
-
-    if (!codigo) {
-      mostrarError('Por favor ingresa tu código estudiantil.');
-      document.getElementById('codigo').classList.add('input-error');
-      document.getElementById('codigo').focus();
-      return;
+  <script>
+    // Si ya hay sesión activa, redirigir directamente a home
+    if (sessionStorage.getItem('estudiante_id')) {
+      window.location.replace('home.php');
     }
-    if (!pass) {
-      mostrarError('Por favor ingresa tu contraseña.');
-      document.getElementById('password').classList.add('input-error');
-      document.getElementById('password').focus();
-      return;
-    }
-
-    setBtnCargando(true);
-
-    try {
-      const r = await fetch('login.php', {
-        method : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body   : JSON.stringify({ codigo, password: pass })
-      });
-
-      // FIX: capturar respuestas no-JSON (ej. error fatal de PHP)
-      const texto = await r.text();
-      let data;
-      try {
-        data = JSON.parse(texto);
-      } catch {
-        // PHP devolvió algo que no es JSON → error de BD o PHP
-        document.getElementById('alert-bd').style.display = 'block';
-        setBtnCargando(false);
-        return;
-      }
-
-      if (data.success) {
-        // Guardar sesión y redirigir
-        sessionStorage.setItem('estudiante_id',      data.estudiante.id);
-        sessionStorage.setItem('estudiante_nombre',  data.estudiante.nombre);
-        sessionStorage.setItem('estudiante_codigo',  data.estudiante.codigo);
-        sessionStorage.setItem('estudiante_programa',data.estudiante.programa);
-        sessionStorage.setItem('estudiante_semestre',data.estudiante.semestre);
-        sessionStorage.setItem('estudiante_promedio',data.estudiante.promedio);
-        window.location.href = 'home.php';
-      } else {
-        // FIX: distinguir error de BD vs credenciales incorrectas
-        if (data.error && data.error.toLowerCase().includes('conexión')) {
-          document.getElementById('alert-bd').style.display = 'block';
-        } else {
-          mostrarError(data.error || 'Credenciales incorrectas.');
-        }
-        setBtnCargando(false);
-      }
-
-    } catch (e) {
-      // Error de red (Laragon apagado, etc.)
-      document.getElementById('alert-bd').style.display = 'block';
-      setBtnCargando(false);
-    }
-  }
-
-  // Enviar con Enter
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
-</script>
+  </script>
 </body>
 </html>
