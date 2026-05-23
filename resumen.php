@@ -87,6 +87,7 @@ if ($es_api) {
       color: white;
       margin-bottom: 24px;
       box-shadow: 0 6px 24px rgba(74,124,37,.3);
+      min-height: 80px;
     }
     .res-titulo { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
 
@@ -154,6 +155,15 @@ if ($es_api) {
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
     .empty-state a { color: var(--verde); font-weight: 600; }
 
+    /* FIX: error-msg visible */
+    .error-api {
+      padding: 20px 24px;
+      font-size: 13px; color: #bf360c;
+      background: #fff3e0;
+      line-height: 1.6;
+    }
+    .error-api strong { display: block; margin-bottom: 4px; }
+
     .spinner { width:28px; height:28px; border:3px solid #e0e4ea; border-top-color:var(--verde); border-radius:50%; animation:spin .7s linear infinite; margin:40px auto; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
@@ -183,14 +193,17 @@ if ($es_api) {
 
 <script>
   const estId = sessionStorage.getItem('estudiante_id');
-  if (!estId) window.location.href = 'index.php';
+  if (!estId) window.location.replace('index.php');
 
   fetch('resumen.php?estudiante_id=' + estId + '&api=1')
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(data => {
-      if (!data.success) return;
+      if (!data.success) throw new Error(data.error || 'Error desconocido');
 
-      const cr = data.resumen_creditos;
+      const cr  = data.resumen_creditos;
       const pct = cr.porcentaje;
 
       // Banner
@@ -269,8 +282,18 @@ if ($es_api) {
           <tbody>${filas}</tbody>
         </table>`;
     })
-    .catch(() => {
-      document.getElementById('banner').innerHTML = '<p style="color:white">Error cargando datos.</p>';
+    .catch(err => {
+      // FIX: ambos elementos muestran el error, no quedan en spinner
+      const msg = err.message || 'No se pudo conectar al servidor.';
+      document.getElementById('banner').innerHTML =
+        `<strong style="color:white;display:block;margin-bottom:6px">⚠️ Error al cargar el resumen</strong>
+         <span style="opacity:.85;font-size:13px">${msg}. Verifica que MySQL esté activo.</span>`;
+      document.getElementById('tabla-contenido').innerHTML =
+        `<div class="error-api">
+           <strong>⚠️ No se pudieron cargar las materias</strong>
+           ${msg}. Verifica que Laragon/XAMPP esté activo y la base de datos <code>uts_matriculas</code> exista.
+           <br><br><a href="home.php" style="color:#bf360c;font-weight:600">← Volver al inicio</a>
+         </div>`;
     });
 </script>
 </body>

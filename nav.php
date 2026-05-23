@@ -9,14 +9,14 @@
   </div>
 
   <div class="nav-links">
-    <a href="home.php"       class="nav-link" data-page="home">🏠 Inicio</a>
+    <a href="home.php"        class="nav-link" data-page="home">🏠 Inicio</a>
     <a href="inscripcion.php" class="nav-link" data-page="inscripcion">📋 Inscripción</a>
-    <a href="resumen.php"    class="nav-link" data-page="resumen">📊 Resumen</a>
+    <a href="resumen.php"     class="nav-link" data-page="resumen">📊 Resumen</a>
   </div>
 
   <div class="nav-right">
     <div class="nav-est">
-      <div class="nav-avatar" id="nav-avatar">JP</div>
+      <div class="nav-avatar" id="nav-avatar">?</div>
       <div>
         <div class="nav-nombre" id="nav-nombre">Cargando...</div>
         <div class="nav-codigo" id="nav-codigo"></div>
@@ -96,8 +96,15 @@
 </style>
 
 <script>
-  // Marcar enlace activo
   (function(){
+    // ── FIX: usar replace() para que el botón Atrás no regrese a páginas protegidas ──
+    const estId = sessionStorage.getItem('estudiante_id');
+    if (!estId) {
+      window.location.replace('index.php');
+      return;
+    }
+
+    // Marcar enlace activo
     const page = document.querySelector('meta[name="pagina"]')?.content;
     if (page) {
       document.querySelectorAll('.nav-link').forEach(a => {
@@ -106,21 +113,17 @@
     }
 
     // Cargar datos del estudiante desde sessionStorage
-    const nombre  = sessionStorage.getItem('estudiante_nombre') || '';
-    const codigo  = sessionStorage.getItem('estudiante_codigo') || '';
-    const programa= sessionStorage.getItem('estudiante_programa') || '';
-    if (!sessionStorage.getItem('estudiante_id')) {
-      window.location.href = 'index.php';
-      return;
-    }
-    const iniciales = nombre.split(' ').slice(0,2).map(w=>w[0]).join('');
-    document.getElementById('nav-avatar').textContent  = iniciales;
-    document.getElementById('nav-nombre').textContent  = nombre;
-    document.getElementById('nav-codigo').textContent  = codigo;
+    const nombre  = sessionStorage.getItem('estudiante_nombre')   || '';
+    const codigo  = sessionStorage.getItem('estudiante_codigo')   || '';
+
+    const iniciales = nombre.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() || '?';
+    document.getElementById('nav-avatar').textContent = iniciales;
+    document.getElementById('nav-nombre').textContent = nombre || 'Estudiante';
+    document.getElementById('nav-codigo').textContent = codigo;
   })();
 
   function logout() {
     sessionStorage.clear();
-    window.location.href = 'index.php';
+    window.location.replace('index.php');
   }
 </script>

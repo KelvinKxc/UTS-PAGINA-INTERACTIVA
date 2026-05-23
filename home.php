@@ -135,6 +135,19 @@
       white-space: nowrap;
     }
     .empty-msg { text-align:center; padding: 32px; color: var(--texto-sub); font-size: 13px; }
+    .empty-msg a { color: var(--verde); font-weight: 600; }
+
+    /* FIX: error-msg para cuando falla la API */
+    .error-api {
+      background: #fff3e0;
+      color: #bf360c;
+      border: 1px solid #ffcc80;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .error-api strong { display: block; margin-bottom: 4px; }
 
     .spinner {
       width: 24px; height: 24px; border: 3px solid #e0e4ea;
@@ -153,7 +166,7 @@
   <div class="bienvenida">
     <div>
       <div class="bien-titulo" id="bien-titulo">¡Hola!</div>
-      <div class="bien-sub" id="bien-sub">Bienvenido al sistema estudiantil UTS</div>
+      <div class="bien-sub"   id="bien-sub">Bienvenido al sistema estudiantil UTS</div>
       <div class="bien-badges">
         <span class="badge" id="badge-programa">Cargando...</span>
         <span class="badge" id="badge-semestre"></span>
@@ -201,31 +214,62 @@
 </div>
 
 <script>
+  // ── FIX PRINCIPAL: verificar sesión antes de cualquier otra cosa ──
   const estId = sessionStorage.getItem('estudiante_id');
-  if (!estId) window.location.href = 'index.php';
+  if (!estId) {
+    window.location.replace('index.php');
+  }
 
-  // Info del estudiante
-  const nombre   = sessionStorage.getItem('estudiante_nombre') || '';
-  const codigo   = sessionStorage.getItem('estudiante_codigo') || '';
+  // Leer datos de sessionStorage (guardados en index.php mejorado)
+  const nombre   = sessionStorage.getItem('estudiante_nombre')   || '';
+  const codigo   = sessionStorage.getItem('estudiante_codigo')   || '';
   const programa = sessionStorage.getItem('estudiante_programa') || '';
+  const semestre = sessionStorage.getItem('estudiante_semestre') || '';
+  const promedio = sessionStorage.getItem('estudiante_promedio') || '—';
 
-  document.getElementById('bien-titulo').textContent  = '¡Hola, ' + nombre.split(' ')[0] + '!';
-  document.getElementById('bien-sub').textContent     = nombre + ' · ' + programa;
-  document.getElementById('badge-programa').textContent = programa;
-  document.getElementById('badge-id').textContent    = 'ID: ' + codigo;
+  // Poblar bienvenida inmediatamente con datos de sesión (sin esperar API)
+  document.getElementById('bien-titulo').textContent   = '¡Hola, ' + (nombre.split(' ')[0] || nombre) + '!';
+  document.getElementById('bien-sub').textContent      = nombre + (programa ? ' · ' + programa : '');
+  document.getElementById('badge-programa').textContent = programa || 'Sin programa';
+  document.getElementById('badge-id').textContent      = 'Código: ' + codigo;
+  document.getElementById('promedio-num').textContent  = promedio || '—';
+  if (semestre) {
+    document.getElementById('badge-semestre').textContent = 'Semestre ' + semestre;
+  }
 
-  // Cargar resumen desde API
+  // ── Función de error reutilizable ──
+  function mostrarErrorStats(msg) {
+    document.getElementById('stats-grid').innerHTML =
+      `<div class="error-api"><strong>⚠️ No se pudieron cargar las estadísticas</strong>${msg}</div>`;
+  }
+
+  function mostrarErrorMaterias(msg) {
+    document.getElementById('mat-lista').innerHTML =
+      `<div class="error-api"><strong>⚠️ No se pudieron cargar las materias</strong>${msg}
+       <br><a href="index.php" style="color:#bf360c;font-weight:600">Volver al inicio →</a></div>`;
+  }
+
+  // ── Cargar datos desde la API ──
   fetch('resumen.php?estudiante_id=' + estId + '&api=1')
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(data => {
-      if (!data.success) return;
+      if (!data.success) {
+        mostrarErrorStats(data.error || 'Error desconocido.');
+        mostrarErrorMaterias(data.error || 'Error desconocido.');
+        return;
+      }
 
-      const e = data.estudiante;
-      document.getElementById('badge-semestre').textContent = 'Semestre ' + e.semestre;
-      document.getElementById('promedio-num').textContent   = e.promedio;
-
-      // Stats
+      const e  = data.estudiante;
       const cr = data.resumen_creditos;
+
+      // Actualizar promedio y semestre con datos frescos de BD
+      document.getElementById('promedio-num').textContent    = e.promedio;
+      document.getElementById('badge-semestre').textContent  = 'Semestre ' + e.semestre;
+
+      // Stats cards
       document.getElementById('stats-grid').innerHTML = `
         <div class="stat-card">
           <div class="stat-num">${data.total_materias}</div>
@@ -264,8 +308,14 @@
           </div>`;
         }).join('') + '</div>';
     })
-    .catch(() => {
-      document.getElementById('stats-grid').innerHTML = '<div style="color:#999;font-size:13px">Error cargando datos.</div>';
+    .catch(err => {
+      // FIX: ambos spinners se reemplazan con mensaje de error
+      const esRed = err.message && err.message.includes('fetch');
+      const msg = esRed
+        ? 'No se pudo conectar. Verifica que Laragon/XAMPP esté activo y MySQL encendido.'
+        : 'Error al procesar la respuesta del servidor. Revisa que la base de datos <code>uts_matriculas</code> exista.';
+      mostrarErrorStats(msg);
+      mostrarErrorMaterias(msg);
     });
 </script>
 </body>
