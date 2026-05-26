@@ -1,11 +1,10 @@
 <?php
 // ============================================================
-// config/config.php — Constantes globales del proyecto
+// config/config.php — Ajusta BASE_URL a tu entorno local
 // ============================================================
 
-// URL base del proyecto (sin slash final)
-// Ajusta según tu entorno local, ej: http://localhost/UTS-PAGINA-INTERACTIVA
-define('BASE_URL', 'http://localhost/UTS-PAGINA-INTERACTIVA');
-
-// Ruta absoluta raíz del proyecto
+// Sin slash al final. Ejemplos:
+//   http://localhost/UTS-PAGINA-INTERACTIVA
+//   http://apimatriculas.test
+define('BASE_URL', 'http://apimatriculas.test');
 define('ROOT_PATH', dirname(__DIR__));

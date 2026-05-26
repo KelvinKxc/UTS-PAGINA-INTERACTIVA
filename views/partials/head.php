@@ -1,6 +1,5 @@
 <?php
-// views/partials/head.php
-// Uso: <?php $titulo = 'Inicio'; require_once __DIR__ . '/../partials/head.php'; ?>
+// views/partials/head.php — requiere que $titulo y BASE_URL estén definidos antes de incluir
 $titulo = $titulo ?? 'UTS';
 ?>
 <meta charset="UTF-8">
