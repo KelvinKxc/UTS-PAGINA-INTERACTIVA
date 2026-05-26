@@ -1,48 +1,48 @@
-# UTS — Sistema Estudiantil Interactivo
+# UTS — Página Interactiva
 
-Sistema de matrículas web para Unidades Tecnológicas de Santander.
+Sistema estudiantil para inscripción de materias.
 
-## Estructura del proyecto
+## Estructura
 
 ```
 UTS-PAGINA-INTERACTIVA/
-│
-├── index.php          ← Landing page (punto de entrada)
-├── login.php          ← Pantalla de inicio de sesión
-├── nav.php            ← Barra de navegación (incluida en páginas protegidas)
-├── home.php           ← Panel principal del estudiante
-├── inscripcion.php    ← Inscripción de materias
-├── resumen.php        ← Resumen de créditos y materias inscritas
-│
-└── api/               ← Endpoints PHP (solo JSON, sin HTML)
-    ├── database.php   ← Configuración de la BD
-    ├── login.php      ← POST { codigo, password }
-    ├── resumen.php    ← GET  ?estudiante_id=N
-    ├── materias.php   ← GET  ?estudiante_id=N
-    └── inscribir.php  ← POST { estudiante_id, materia_id }
+├── config/
+│   ├── config.php       ← BASE_URL y ROOT_PATH
+│   └── database.php     ← función conectar() + carga .env
+├── api/
+│   ├── login.php        ← POST { codigo, password }
+│   ├── materias.php     ← GET  ?estudiante_id=N
+│   ├── inscribir.php    ← POST { estudiante_id, materia_id }
+│   └── resumen.php      ← GET  ?estudiante_id=N
+├── views/
+│   ├── home.php
+│   ├── inscripcion.php
+│   ├── resumen.php
+│   └── partials/
+│       ├── head.php
+│       └── nav.php
+├── public/
+│   ├── index.php        ← login (punto de entrada)
+│   ├── css/styles.css
+│   └── js/auth.js
+├── .env                 ← credenciales (NO subir)
+├── .env.example
+└── .gitignore
 ```
 
-## Flujo de navegación
+## Instalación
 
-```
-index.php  →  login.php  →  home.php
-                              ├── inscripcion.php
-                              └── resumen.php
-```
-
-## Instalación (Laragon / XAMPP)
-
-1. Copia la carpeta en `C:\laragon\www\` (Laragon) o `htdocs\` (XAMPP).
-2. Importa la base de datos `uts_matriculas` en MySQL.
-3. Ajusta las credenciales en `api/database.php` si es necesario.
-4. Abre `http://localhost/UTS-PAGINA-INTERACTIVA/` en el navegador.
-5. Ingresa con código `1005678` y contraseña `1234`.
-
-## Cambios respecto a la versión anterior
-
-- `index.php` es ahora la **landing page** con presentación y botón de acceso.
-- `login.php` es solo la pantalla de autenticación.
-- Los endpoints PHP se movieron a la carpeta `api/` para mejor organización.
-- `nav.php` ya no hace redirecciones PHP; la verificación de sesión se hace en JS.
-- Todas las páginas protegidas redirigen a `login.php` (no a `index.php`) cuando no hay sesión.
-- `api/inscribir.php` usa transacciones para evitar condiciones de carrera en cupos.
+1. Copia el proyecto en `htdocs/` (XAMPP) o `www/` (Laragon).
+2. Crea el archivo `.env` basado en `.env.example`:
+   ```
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASS=
+   DB_NAME=uts_matriculas
+   ```
+3. Ajusta `BASE_URL` en `config/config.php` según tu entorno:
+   ```php
+   define('BASE_URL', 'http://localhost/UTS-PAGINA-INTERACTIVA');
+   ```
+4. Importa la base de datos en MySQL.
+5. Abre `http://localhost/UTS-PAGINA-INTERACTIVA/public/index.php`.

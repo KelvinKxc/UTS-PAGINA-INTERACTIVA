@@ -1,17 +1,14 @@
 <?php
 // ============================================================
 // api/login.php — POST { codigo, password }
-// Devuelve JSON con los datos del estudiante autenticado.
+// Devuelve JSON con datos del estudiante si las credenciales son válidas
 // ============================================================
 
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -19,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-require_once __DIR__ . '/database.php';
+require_once dirname(__DIR__) . '/config/database.php';
 
-$body     = json_decode(file_get_contents('php://input'), true);
-$codigo   = trim($body['codigo']   ?? '');
+$body    = json_decode(file_get_contents('php://input'), true);
+$codigo  = trim($body['codigo']   ?? '');
 $password = trim($body['password'] ?? '');
 
 if (!$codigo || !$password) {
@@ -50,7 +47,7 @@ if (!$est) {
 }
 
 // Contraseña demo: '1234' para todos los estudiantes
-// En producción usar password_verify() con hashes almacenados
+// TODO: reemplazar con password_verify($password, $est['password_hash'])
 if ($password !== '1234') {
     http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'Contraseña incorrecta.']);

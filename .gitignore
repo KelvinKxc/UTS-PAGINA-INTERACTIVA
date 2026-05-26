@@ -1,0 +1,19 @@
+# Credenciales — NUNCA subir al repo
+.env
+
+# Dependencias
+vendor/
+
+# Logs de PHP/servidor
+*.log
+error_log
+
+# Cache y temporales
+*.cache
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
