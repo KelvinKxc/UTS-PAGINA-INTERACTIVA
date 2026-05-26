@@ -33,6 +33,7 @@ tbody td{padding:14px 16px;font-size:13px;vertical-align:middle}
 .empty-state{text-align:center;padding:60px 20px;color:var(--texto-sub)}
 .empty-state .icon{font-size:40px;margin-bottom:12px}
 .empty-state a{color:var(--verde);font-weight:600}
+.btn-cancelar{background:#ffebee;color:#c62828;border:1px solid #ffcdd2;padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;white-space:nowrap}.btn-cancelar:hover{background:#c62828;color:white}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:900;display:none;align-items:center;justify-content:center}.overlay.show{display:flex}.modal{background:white;border-radius:16px;padding:28px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}.modal h3{font-size:16px;font-weight:700;margin-bottom:8px}.modal p{font-size:13px;color:var(--texto-sub);line-height:1.5;margin-bottom:20px}.modal-btns{display:flex;gap:10px}.modal-btns button{flex:1;padding:10px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none}.btn-confirmar{background:#c62828;color:white}.btn-modal-cancel{background:#f4f6f8;color:var(--texto)}
 @media(max-width:600px){table{font-size:12px}thead th,tbody td{padding:10px}}
 </style>
 </head>
@@ -68,14 +69,48 @@ fetch(API+'/resumen.php?estudiante_id='+Auth.id)
     const filas=data.materias_inscritas.map(m=>{
       const hor=m.horarios.map(h=>h.dia+' '+h.hora_inicio+'–'+h.hora_fin).join('<br>');
       const fecha=m.fecha_inscripcion?new Date(m.fecha_inscripcion).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'}):'—';
-      return `<tr><td><div class="td-nombre">${m.nombre}</div><div class="td-codigo">${m.codigo}</div></td><td><span class="td-cred">${m.creditos} cr.</span></td><td>${m.docente}</td><td class="td-horario">${hor||'—'}</td><td>${m.salon}</td><td>${fecha}</td><td><span class="inscrita-tag">Inscrita</span></td></tr>`;
+      return `<tr><td><div class="td-nombre">${m.nombre}</div><div class="td-codigo">${m.codigo}</div></td><td><span class="td-cred">${m.creditos} cr.</span></td><td>${m.docente}</td><td class="td-horario">${hor||'—'}</td><td>${m.salon}</td><td>${fecha}</td><td><span class="inscrita-tag">Inscrita</span></td><td><button class="btn-cancelar" onclick="abrirModal(${m.id},'${m.nombre.replace(/'/g,'\'')}')">Cancelar</button></td></tr>`;
     }).join('');
-    document.getElementById('tabla-contenido').innerHTML=`<table><thead><tr><th>Materia</th><th>Créditos</th><th>Docente</th><th>Horario</th><th>Salón</th><th>Fecha inscripción</th><th>Estado</th></tr></thead><tbody>${filas}</tbody></table>`;
+    document.getElementById('tabla-contenido').innerHTML=`<table><thead><tr><th>Materia</th><th>Créditos</th><th>Docente</th><th>Horario</th><th>Salón</th><th>Fecha</th><th>Estado</th><th></th></tr></thead><tbody>${filas}</tbody></table>`;
   })
   .catch(err=>{
     document.getElementById('banner').innerHTML=`<strong style="color:white">⚠️ Error al cargar el resumen:</strong> <span style="opacity:.85;font-size:13px">${err.message}</span>`;
     document.getElementById('tabla-contenido').innerHTML=`<div class="error-api"><strong>⚠️ No se pudieron cargar las materias</strong>${err.message}<br><br><a href="<?= BASE_URL ?>/views/home.php" style="color:#bf360c;font-weight:600">← Volver al inicio</a></div>`;
   });
+</script>
+
+<!-- Modal confirmación cancelar -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>⚠️ Cancelar inscripción</h3>
+    <p id="modal-texto">¿Seguro que quieres cancelar esta materia?</p>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="cerrarModal()">No, mantener</button>
+      <button class="btn-confirmar" id="btn-confirmar" onclick="confirmarCancelar()">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const API_RES = '<?= BASE_URL ?>/api';
+let _cancelId = null, _cancelNombre = '';
+function toast(msg,tipo='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+tipo;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',4000)}
+function abrirModal(id, nombre){_cancelId=id;_cancelNombre=nombre;document.getElementById('modal-texto').textContent=`¿Seguro que quieres cancelar la inscripción de "${nombre}"?`;document.getElementById('overlay').classList.add('show')}
+function cerrarModal(){document.getElementById('overlay').classList.remove('show');_cancelId=null}
+async function confirmarCancelar(){
+  if(!_cancelId)return;
+  const btn=document.getElementById('btn-confirmar');
+  btn.disabled=true;btn.textContent='Cancelando...';
+  try{
+    const r=await fetch(API_RES+'/cancelar.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({estudiante_id:parseInt(Auth.id),materia_id:_cancelId})});
+    const data=await r.json();
+    cerrarModal();
+    if(data.success){toast(data.mensaje,'ok');setTimeout(()=>location.reload(),1200)}
+    else{toast(data.error,'err')}
+  }catch{toast('Error de red.','err');cerrarModal()}
+  finally{btn.disabled=false;btn.textContent='Sí, cancelar'}
+}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))cerrarModal()});
 </script>
 </body>
 </html>

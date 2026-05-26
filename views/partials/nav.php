@@ -1,6 +1,5 @@
 <?php
-// views/partials/nav.php
-// Requiere: BASE_URL definido, $pagina_actual definido
+// views/partials/nav.php — incluir con require_once __DIR__ . '/partials/nav.php'
 $pagina_actual = $pagina_actual ?? '';
 ?>
 <nav class="navbar">
@@ -14,6 +13,7 @@ $pagina_actual = $pagina_actual ?? '';
   <div class="nav-links">
     <a href="<?= BASE_URL ?>/views/home.php"        class="nav-link <?= $pagina_actual==='home'        ? 'activo':'' ?>">🏠 Inicio</a>
     <a href="<?= BASE_URL ?>/views/inscripcion.php" class="nav-link <?= $pagina_actual==='inscripcion' ? 'activo':'' ?>">📋 Inscripción</a>
+    <a href="<?= BASE_URL ?>/views/horario.php"     class="nav-link <?= $pagina_actual==='horario'     ? 'activo':'' ?>">📅 Horario</a>
     <a href="<?= BASE_URL ?>/views/resumen.php"     class="nav-link <?= $pagina_actual==='resumen'     ? 'activo':'' ?>">📊 Resumen</a>
   </div>
   <div class="nav-right">

@@ -280,7 +280,7 @@ body {
 <script>
 // Si ya hay sesión activa, redirigir a home
 if (sessionStorage.getItem('estudiante_id')) {
-  window.location.href = 'home.php';
+  window.location.href = '../views/home.php';
 }
 
 function autocompletar() {
@@ -332,7 +332,7 @@ async function login() {
   setBtnCargando(true);
 
   try {
-    const r = await fetch('login.php', {
+    const r = await fetch('../api/login.php', {
       method : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body   : JSON.stringify({ codigo, password: pass })
@@ -355,7 +355,7 @@ async function login() {
       sessionStorage.setItem('estudiante_programa', data.estudiante.programa);
       sessionStorage.setItem('estudiante_semestre', data.estudiante.semestre);
       sessionStorage.setItem('estudiante_promedio', data.estudiante.promedio);
-      window.location.href = 'home.php';
+      window.location.href = '../views/home.php';
     } else {
       if (data.error && data.error.toLowerCase().includes('conexión')) {
         document.getElementById('alert-bd').style.display = 'block';

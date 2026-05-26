@@ -70,6 +70,11 @@ $pagina_actual = 'home';
       <div><div class="acceso-nombre">Inscripción de materias</div><div class="acceso-desc">Ver materias disponibles e inscribirte</div></div>
       <div class="acceso-arrow">›</div>
     </a>
+    <a href="<?= BASE_URL ?>/views/horario.php" class="acceso-card">
+      <div class="acceso-icon">📅</div>
+      <div><div class="acceso-nombre">Mi horario</div><div class="acceso-desc">Ver tu horario semanal de clases</div></div>
+      <div class="acceso-arrow">›</div>
+    </a>
     <a href="<?= BASE_URL ?>/views/resumen.php" class="acceso-card">
       <div class="acceso-icon">📊</div>
       <div><div class="acceso-nombre">Resumen de inscripción</div><div class="acceso-desc">Ver tus créditos y materias inscritas</div></div>
