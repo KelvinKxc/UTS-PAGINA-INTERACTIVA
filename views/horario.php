@@ -172,7 +172,7 @@ document.getElementById('overlay').addEventListener('click', e => {
 });
 
 function construirTabla(materias) {
-  // Construir mapa: dia+hora → materia
+  // mapa clave "DIA_HH" → { m, color, esInicio, duracion }
   const celdas = {};
   materias.forEach((m, idx) => {
     const color = COLORES[idx % COLORES.length];
@@ -180,8 +180,7 @@ function construirTabla(materias) {
       const hi = parseInt(h.hora_inicio.split(':')[0]);
       const hf = parseInt(h.hora_fin.split(':')[0]);
       for (let hora = hi; hora < hf; hora++) {
-        const key = `${h.dia}_${hora}:00`;
-        celdas[key] = { m, color, inicio: hora === hi, duracion: hf - hi };
+        celdas[`${h.dia}_${hora}`] = { m, color, esInicio: hora === hi, duracion: hf - hi };
       }
     });
   });
@@ -190,12 +189,21 @@ function construirTabla(materias) {
   DIAS.forEach(d => html += `<th>${DIAS_LABEL[d]}</th>`);
   html += '</tr></thead><tbody>';
 
+  // set para rastrear celdas ya consumidas por un rowspan
+  const ocupadas = new Set();
+
   HORAS.forEach(hora => {
+    const horaNum = parseInt(hora.split(':')[0]);
     html += `<tr><td>${hora}</td>`;
     DIAS.forEach(dia => {
-      const key = `${dia}_${hora}`;
+      const key = `${dia}_${horaNum}`;
+      if (ocupadas.has(key)) return; // celda absorbida por rowspan anterior
       const celda = celdas[key];
-      if (celda && celda.inicio) {
+      if (celda && celda.esInicio) {
+        // marcar las filas siguientes como ocupadas
+        for (let i = 1; i < celda.duracion; i++) {
+          ocupadas.add(`${dia}_${horaNum + i}`);
+        }
         html += `<td rowspan="${celda.duracion}" style="padding:4px;border-right:1px solid var(--gris-borde)">
           <div class="bloque ${celda.color}" title="${celda.m.nombre} · ${celda.m.salon}">
             <div class="bloque-nombre">${celda.m.nombre}</div>
@@ -204,7 +212,6 @@ function construirTabla(materias) {
       } else if (!celda) {
         html += '<td></td>';
       }
-      // celdas ocupadas por rowspan no se emiten
     });
     html += '</tr>';
   });

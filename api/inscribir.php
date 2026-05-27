@@ -63,10 +63,10 @@ foreach ($horarios_nueva as $hn) {
     }
 }
 
-// Insertar inscripción
+// Insertar inscripción (o reactivar si fue cancelada antes)
 $conn->begin_transaction();
 try {
-    $ins=$conn->prepare("INSERT INTO inscripciones (estudiante_id,materia_id,estado,fecha_inscripcion) VALUES (?,?,'inscrita',NOW())");
+    $ins=$conn->prepare("INSERT INTO inscripciones (estudiante_id,materia_id,estado,fecha_inscripcion) VALUES (?,?,'inscrita',NOW()) ON DUPLICATE KEY UPDATE estado='inscrita', fecha_inscripcion=NOW()");
     $ins->bind_param('ii',$estudiante_id,$materia_id); $ins->execute(); $ins->close();
 
     $upd=$conn->prepare("UPDATE materias SET cupos_restantes=cupos_restantes-1 WHERE id=? AND cupos_restantes>0");

@@ -1,152 +1,293 @@
--- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
---
--- Host: localhost    Database: uts_matriculas
--- ------------------------------------------------------
--- Server version	8.4.3
+-- ============================================================
+-- uts_matriculas — Ingeniería de Sistemas · UTS
+-- ============================================================
+DROP DATABASE IF EXISTS `uts_matriculas`;
+CREATE DATABASE `uts_matriculas` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `uts_matriculas`;
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `estudiantes`
---
-
+-- ──────────────────────────────────────────────
+--  ESTUDIANTES
+-- ──────────────────────────────────────────────
 DROP TABLE IF EXISTS `estudiantes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `estudiantes` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `programa` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `semestre` int NOT NULL DEFAULT '1',
-  `promedio` decimal(3,1) NOT NULL DEFAULT '0.0',
-  `creditos_max` int NOT NULL DEFAULT '20',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `id`           INT NOT NULL AUTO_INCREMENT,
+  `codigo`       VARCHAR(20)  NOT NULL,
+  `nombre`       VARCHAR(100) NOT NULL,
+  `programa`     VARCHAR(100) NOT NULL,
+  `semestre`     INT NOT NULL DEFAULT 1,
+  `promedio`     DECIMAL(3,1) NOT NULL DEFAULT 0.0,
+  `creditos_max` INT NOT NULL DEFAULT 20,
+  `created_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `codigo` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `estudiantes`
---
+INSERT INTO `estudiantes` VALUES
+  (1,'1005678','Juan Pérez',       'Ingeniería de Sistemas',6,4.2,20,NOW()),
+  (2,'1005879','María López',      'Ingeniería de Sistemas',3,3.5,20,NOW()),
+  (3,'1005880','Carlos Ramírez',   'Ingeniería de Sistemas',4,4.0,20,NOW()),
+  (4,'1005881','Laura Gómez',      'Ingeniería de Sistemas',2,3.8,20,NOW()),
+  (5,'1005882','Andrés Torres',    'Ingeniería de Sistemas',1,0.0,20,NOW());
 
-LOCK TABLES `estudiantes` WRITE;
-/*!40000 ALTER TABLE `estudiantes` DISABLE KEYS */;
-INSERT INTO `estudiantes` VALUES (1,'1005678','Juan Pérez','Ingeniería de Sistemas',6,4.2,20,'2026-05-23 15:18:29'),(2,'1005878','Juan Pérez','Tecnología en Sistemas',4,3.8,20,'2026-05-25 16:38:45'),(3,'1005879','María López','Tecnología en Sistemas',3,3.5,18,'2026-05-25 16:38:45'),(4,'1005880','Carlos Ramírez','Tecnología en Sistemas',5,4.0,22,'2026-05-25 16:38:45'),(5,'1006001','Julián Andrés Díaz Trujillo','Tecnología en Desarrollo de Software',4,3.9,18,'2026-05-26 19:34:56'),(6,'1006002','María Fernanda Gómez Rueda','Tecnología en Gestión Empresarial',3,4.1,18,'2026-05-26 19:34:56'),(7,'1006003','Carlos Eduardo Vargas Pinto','Tecnología en Electrónica Industrial',5,3.6,20,'2026-05-26 19:34:56'),(8,'1006004','Laura Daniela Suárez Morales','Tecnología en Desarrollo de Software',2,4.0,16,'2026-05-26 19:34:56'),(9,'1006005','Andrés Felipe Rojas Quintero','Tecnología en Sistemas de Información',6,3.4,20,'2026-05-26 19:34:56'),(10,'1006006','Valentina Castillo Herrera','Tecnología en Gestión Empresarial',1,4.2,16,'2026-05-26 19:34:56'),(11,'1006007','Diego Alejandro Peña Cáceres','Tecnología en Electrónica Industrial',3,3.8,18,'2026-05-26 19:34:56'),(12,'1006008','Natalia Ríos Sánchez','Tecnología en Sistemas de Información',4,3.9,18,'2026-05-26 19:34:56'),(13,'1006009','Sebastián Molina Ortega','Tecnología en Desarrollo de Software',5,3.6,20,'2026-05-26 19:34:56'),(14,'1006010','Camila Andrea Torres Blanco','Tecnología en Gestión Empresarial',2,4.1,16,'2026-05-26 19:34:56');
-/*!40000 ALTER TABLE `estudiantes` ENABLE KEYS */;
-UNLOCK TABLES;
+-- ──────────────────────────────────────────────
+--  MATERIAS  (6 semestres × 20 créditos)
+--  Semestre 1: 20 cr  |  Semestre 2: 20 cr
+--  Semestre 3: 20 cr  |  Semestre 4: 20 cr
+--  Semestre 5: 20 cr  |  Semestre 6: 20 cr
+-- ──────────────────────────────────────────────
+DROP TABLE IF EXISTS `materias`;
+CREATE TABLE `materias` (
+  `id`               INT NOT NULL AUTO_INCREMENT,
+  `codigo`           VARCHAR(20)  NOT NULL,
+  `nombre`           VARCHAR(100) NOT NULL,
+  `creditos`         INT NOT NULL,
+  `semestre_plan`    INT NOT NULL,
+  `cupos_total`      INT NOT NULL DEFAULT 30,
+  `cupos_restantes`  INT NOT NULL DEFAULT 30,
+  `docente`          VARCHAR(100) NOT NULL DEFAULT 'Por asignar',
+  `salon`            VARCHAR(30)  NOT NULL DEFAULT 'Por asignar',
+  `created_at`       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `codigo` (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Table structure for table `horarios`
---
+INSERT INTO `materias`
+  (`id`,`codigo`,`nombre`,`creditos`,`semestre_plan`,`cupos_total`,`cupos_restantes`,`docente`,`salon`) VALUES
 
+-- ── SEMESTRE 1 · 20 créditos ──────────────────
+(1, 'IS-101','Matemáticas I',                4,1,35,30,'Dr. Jaime Rodríguez Cruz',   'Aula A-101'),
+(2, 'IS-102','Introducción a la Programación',4,1,30,28,'Ing. Luz Karime Castellanos','Lab. B-101'),
+(3, 'IS-103','Lógica Matemática',             3,1,32,30,'Dr. Jaime Rodríguez Cruz',   'Aula A-102'),
+(4, 'IS-104','Fundamentos de Hardware',       3,1,28,25,'Ing. Pedro Vega Cifuentes',  'Lab. C-101'),
+(5, 'IS-105','Comunicación Oral y Escrita',   3,1,40,35,'Dra. Martha Prada Soto',     'Aula A-103'),
+(6, 'IS-106','Ética y Ciudadanía',            3,1,40,38,'Dra. Claudia Rangel Vera',   'Aula A-104'),
+
+-- ── SEMESTRE 2 · 20 créditos ──────────────────
+(7, 'IS-201','Matemáticas II',                4,2,35,30,'Dr. Jaime Rodríguez Cruz',   'Aula A-201'),
+(8, 'IS-202','Programación Orientada a Obj.', 4,2,30,27,'Ing. Luz Karime Castellanos','Lab. B-102'),
+(9, 'IS-203','Estructura de Datos',           4,2,28,25,'Ing. Luz Karime Castellanos','Lab. B-103'),
+(10,'IS-204','Arquitectura de Computadores',  4,2,28,26,'Ing. Pedro Vega Cifuentes',  'Lab. C-102'),
+(11,'IS-205','Inglés Técnico I',              4,2,32,30,'Dra. Diana Patiño Ibáñez',   'Aula A-202'),
+
+-- ── SEMESTRE 3 · 20 créditos ──────────────────
+(12,'IS-301','Matemáticas III',               4,3,30,28,'Dr. Jaime Rodríguez Cruz',   'Aula A-301'),
+(13,'IS-302','Bases de Datos I',              4,3,30,25,'Ing. Laura Ruiz Castillo',   'Lab. B-201'),
+(14,'IS-303','Redes de Computadores I',       4,3,28,25,'Ing. Ricardo Mora Peña',     'Lab. C-201'),
+(15,'IS-304','Sistemas Operativos',           4,3,28,24,'Ing. Carlos López Díaz',     'Lab. C-202'),
+(16,'IS-305','Inglés Técnico II',             4,3,32,30,'Dra. Diana Patiño Ibáñez',   'Aula A-302'),
+
+-- ── SEMESTRE 4 · 20 créditos ──────────────────
+(17,'IS-401','Cálculo Numérico',              3,4,28,25,'Dr. Jaime Rodríguez Cruz',   'Aula A-401'),
+(18,'IS-402','Bases de Datos II',             4,4,30,27,'Ing. Laura Ruiz Castillo',   'Lab. B-202'),
+(19,'IS-403','Redes de Computadores II',      4,4,28,24,'Ing. Ricardo Mora Peña',     'Lab. C-301'),
+(20,'IS-404','Ingeniería de Software I',      4,4,25,22,'Dr. Roberto Sánchez Gil',    'Aula A-402'),
+(21,'IS-405','Estadística y Probabilidad',    5,4,30,28,'Dr. Jaime Rodríguez Cruz',   'Aula A-403'),
+
+-- ── SEMESTRE 5 · 20 créditos ──────────────────
+(22,'IS-501','Ingeniería de Software II',     4,5,25,20,'Dr. Roberto Sánchez Gil',    'Aula A-501'),
+(23,'IS-502','Seguridad Informática',         4,5,25,22,'Ing. Hernando Fonseca Ruiz', 'Lab. C-302'),
+(24,'IS-503','Inteligencia Artificial I',     4,5,25,23,'Dra. Sandra Leal Mora',      'Lab. B-301'),
+(25,'IS-504','Electiva Profesional I',        4,5,30,28,'Por asignar',                'Aula A-502'),
+(26,'IS-505','Gestión de Proyectos TI',       4,5,28,25,'Dra. Beatriz Suárez Cano',   'Aula A-503'),
+
+-- ── SEMESTRE 6 · 20 créditos ──────────────────
+(27,'IS-601','Arquitectura Empresarial',      4,6,25,22,'Ing. Luz Karime Castellanos','Aula A-601'),
+(28,'IS-602','Inteligencia Artificial II',    4,6,25,20,'Dra. Sandra Leal Mora',      'Lab. B-401'),
+(29,'IS-603','Computación en la Nube',        4,6,25,23,'Ing. Pedro Vega Cifuentes',  'Lab. C-401'),
+(30,'IS-604','Electiva Profesional II',       4,6,30,28,'Por asignar',                'Aula A-602'),
+(31,'IS-605','Proyecto de Grado',             4,6,20,18,'Dra. Luz Karime Castellanos','Sala Proyectos');
+
+-- ── Verificación de créditos por semestre ─────
+-- S1: 4+4+3+3+3+3 = 20 ✓
+-- S2: 4+4+4+4+4   = 20 ✓
+-- S3: 4+4+4+4+4   = 20 ✓
+-- S4: 3+4+4+4+5   = 20 ✓
+-- S5: 4+4+4+4+4   = 20 ✓
+-- S6: 4+4+4+4+4   = 20 ✓
+
+-- ──────────────────────────────────────────────
+--  PREREQUISITOS
+--  Si el estudiante no aprobó la materia_previa
+--  (nota_aprobacion >= 3.0), no puede inscribir
+--  la materia_id correspondiente
+-- ──────────────────────────────────────────────
+DROP TABLE IF EXISTS `prerequisitos`;
+CREATE TABLE `prerequisitos` (
+  `id`              INT NOT NULL AUTO_INCREMENT,
+  `materia_id`      INT NOT NULL COMMENT 'Materia que requiere el prereq',
+  `materia_previa_id` INT NOT NULL COMMENT 'Materia que debe estar aprobada',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unico_prereq` (`materia_id`,`materia_previa_id`),
+  FOREIGN KEY (`materia_id`)       REFERENCES `materias`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`materia_previa_id`) REFERENCES `materias`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `prerequisitos` (`materia_id`,`materia_previa_id`) VALUES
+-- Semestre 2 requiere Semestre 1
+(7, 1),   -- Matemáticas II        ← Matemáticas I
+(8, 2),   -- POO                   ← Intro Programación
+(9, 2),   -- Estructura de Datos   ← Intro Programación
+(10,4),   -- Arq. Computadores     ← Fundamentos Hardware
+(11,5),   -- Inglés Técnico I      ← Com. Oral y Escrita
+-- Semestre 3 requiere Semestre 2
+(12,7),   -- Matemáticas III       ← Matemáticas II
+(13,8),   -- Bases de Datos I      ← POO
+(13,9),   -- Bases de Datos I      ← Estructura de Datos
+(14,10),  -- Redes I               ← Arq. Computadores
+(15,10),  -- Sistemas Operativos   ← Arq. Computadores
+(16,11),  -- Inglés Técnico II     ← Inglés Técnico I
+-- Semestre 4 requiere Semestre 3
+(17,12),  -- Cálculo Numérico      ← Matemáticas III
+(18,13),  -- Bases de Datos II     ← Bases de Datos I
+(19,14),  -- Redes II              ← Redes I
+(20,13),  -- Ing. Software I       ← Bases de Datos I
+(21,12),  -- Estadística           ← Matemáticas III
+-- Semestre 5 requiere Semestre 4
+(22,20),  -- Ing. Software II      ← Ing. Software I
+(23,19),  -- Seguridad             ← Redes II
+(24,17),  -- IA I                  ← Cálculo Numérico
+(25,18),  -- Electiva I            ← Bases de Datos II
+(26,20),  -- Gestión Proyectos TI  ← Ing. Software I
+-- Semestre 6 requiere Semestre 5
+(27,22),  -- Arq. Empresarial      ← Ing. Software II
+(28,24),  -- IA II                 ← IA I
+(29,23),  -- Nube                  ← Seguridad
+(30,25),  -- Electiva II           ← Electiva I
+(31,22),  -- Proyecto Grado        ← Ing. Software II
+(31,26);  -- Proyecto Grado        ← Gestión Proyectos TI
+
+-- ──────────────────────────────────────────────
+--  NOTAS HISTÓRICAS
+--  Registra la nota final obtenida por el estudiante
+--  en materias ya cursadas (semestres anteriores)
+--  Aprobada si nota >= 3.0
+-- ──────────────────────────────────────────────
+DROP TABLE IF EXISTS `notas`;
+CREATE TABLE `notas` (
+  `id`            INT NOT NULL AUTO_INCREMENT,
+  `estudiante_id` INT NOT NULL,
+  `materia_id`    INT NOT NULL,
+  `nota`          DECIMAL(3,1) NOT NULL,
+  `semestre_cursado` INT NOT NULL,
+  `aprobada`      TINYINT(1) GENERATED ALWAYS AS (IF(`nota` >= 3.0, 1, 0)) STORED,
+  `created_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unica_nota` (`estudiante_id`,`materia_id`),
+  FOREIGN KEY (`estudiante_id`) REFERENCES `estudiantes`(`id`),
+  FOREIGN KEY (`materia_id`)    REFERENCES `materias`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Juan Pérez (semestre 6) tiene aprobados semestres 1-5
+INSERT INTO `notas` (`estudiante_id`,`materia_id`,`nota`,`semestre_cursado`) VALUES
+-- S1
+(1,1,4.5,1),(1,2,4.2,1),(1,3,3.8,1),(1,4,4.0,1),(1,5,3.5,1),(1,6,4.8,1),
+-- S2
+(1,7,4.1,2),(1,8,4.3,2),(1,9,3.9,2),(1,10,4.0,2),(1,11,3.7,2),
+-- S3
+(1,12,3.8,3),(1,13,4.2,3),(1,14,4.5,3),(1,15,3.6,3),(1,16,4.0,3),
+-- S4
+(1,17,3.5,4),(1,18,4.1,4),(1,19,4.3,4),(1,20,4.2,4),(1,21,3.9,4),
+-- S5
+(1,22,4.0,5),(1,23,3.8,5),(1,24,4.1,5),(1,25,3.7,5),(1,26,4.2,5);
+
+-- María López (semestre 3) aprobó S1 y S2
+INSERT INTO `notas` (`estudiante_id`,`materia_id`,`nota`,`semestre_cursado`) VALUES
+(2,1,3.5,1),(2,2,3.8,1),(2,3,4.0,1),(2,4,3.2,1),(2,5,2.8,1),(2,6,4.1,1),
+-- S2 (nota < 3 en POO → no puede inscribir Estructura de Datos ni BD I)
+(2,7,3.6,2),(2,8,2.5,2),(2,10,3.4,2),(2,11,3.9,2);
+
+-- Carlos Ramírez (semestre 4) aprobó S1-S3
+INSERT INTO `notas` (`estudiante_id`,`materia_id`,`nota`,`semestre_cursado`) VALUES
+(3,1,4.0,1),(3,2,4.2,1),(3,3,3.9,1),(3,4,3.7,1),(3,5,4.1,1),(3,6,3.5,1),
+(3,7,3.8,2),(3,8,4.0,2),(3,9,3.6,2),(3,10,3.9,2),(3,11,4.2,2),
+(3,12,3.7,3),(3,13,4.1,3),(3,14,3.9,3),(3,15,3.5,3),(3,16,4.0,3);
+
+-- Laura Gómez (semestre 2) aprobó S1
+INSERT INTO `notas` (`estudiante_id`,`materia_id`,`nota`,`semestre_cursado`) VALUES
+(4,1,3.9,1),(4,2,4.1,1),(4,3,3.7,1),(4,4,3.5,1),(4,5,4.0,1),(4,6,4.3,1);
+
+-- ──────────────────────────────────────────────
+--  HORARIOS  (un horario real por materia)
+-- ──────────────────────────────────────────────
 DROP TABLE IF EXISTS `horarios`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `horarios` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `materia_id` int NOT NULL,
-  `dia` enum('LUN','MAR','MIE','JUE','VIE','SAB') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `hora_inicio` time NOT NULL,
-  `hora_fin` time NOT NULL,
+  `id`          INT NOT NULL AUTO_INCREMENT,
+  `materia_id`  INT NOT NULL,
+  `dia`         ENUM('LUN','MAR','MIE','JUE','VIE','SAB') NOT NULL,
+  `hora_inicio` TIME NOT NULL,
+  `hora_fin`    TIME NOT NULL,
   PRIMARY KEY (`id`),
   KEY `materia_id` (`materia_id`),
-  CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  FOREIGN KEY (`materia_id`) REFERENCES `materias`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `horarios`
---
+INSERT INTO `horarios` (`materia_id`,`dia`,`hora_inicio`,`hora_fin`) VALUES
+-- S1
+(1,'LUN','07:00','09:00'),(1,'MIE','07:00','09:00'),
+(2,'MAR','07:00','09:00'),(2,'JUE','07:00','09:00'),
+(3,'LUN','09:00','11:00'),(3,'MIE','09:00','11:00'),
+(4,'MAR','09:00','11:00'),(4,'JUE','09:00','11:00'),
+(5,'VIE','07:00','09:00'),(5,'SAB','07:00','09:00'),
+(6,'VIE','09:00','11:00'),
+-- S2
+(7,'LUN','11:00','13:00'),(7,'MIE','11:00','13:00'),
+(8,'MAR','11:00','13:00'),(8,'JUE','11:00','13:00'),
+(9,'LUN','13:00','15:00'),(9,'MIE','13:00','15:00'),
+(10,'MAR','13:00','15:00'),(10,'JUE','13:00','15:00'),
+(11,'VIE','11:00','13:00'),(11,'SAB','11:00','13:00'),
+-- S3
+(12,'LUN','07:00','09:00'),(12,'JUE','07:00','09:00'),
+(13,'MAR','07:00','09:00'),(13,'VIE','07:00','09:00'),
+(14,'LUN','09:00','11:00'),(14,'MIE','09:00','11:00'),
+(15,'MAR','09:00','11:00'),(15,'JUE','09:00','11:00'),
+(16,'VIE','09:00','11:00'),(16,'SAB','09:00','11:00'),
+-- S4
+(17,'LUN','11:00','13:00'),(17,'JUE','11:00','13:00'),
+(18,'MAR','11:00','13:00'),(18,'VIE','11:00','13:00'),
+(19,'LUN','13:00','15:00'),(19,'MIE','13:00','15:00'),
+(20,'MAR','13:00','15:00'),(20,'JUE','13:00','15:00'),
+(21,'MIE','11:00','13:00'),(21,'VIE','13:00','15:00'),
+-- S5
+(22,'LUN','15:00','17:00'),(22,'MIE','15:00','17:00'),
+(23,'MAR','15:00','17:00'),(23,'JUE','15:00','17:00'),
+(24,'LUN','17:00','19:00'),(24,'MIE','17:00','19:00'),
+(25,'MAR','17:00','19:00'),(25,'JUE','17:00','19:00'),
+(26,'VIE','15:00','17:00'),(26,'VIE','17:00','19:00'),
+-- S6
+(27,'LUN','07:00','09:00'),(27,'MIE','07:00','09:00'),
+(28,'MAR','07:00','09:00'),(28,'JUE','07:00','09:00'),
+(29,'LUN','09:00','11:00'),(29,'MIE','09:00','11:00'),
+(30,'MAR','09:00','11:00'),(30,'JUE','09:00','11:00'),
+(31,'VIE','07:00','11:00');
 
-LOCK TABLES `horarios` WRITE;
-/*!40000 ALTER TABLE `horarios` DISABLE KEYS */;
-INSERT INTO `horarios` VALUES (1,1,'LUN','06:00:00','08:00:00'),(2,1,'MIE','06:00:00','08:00:00'),(3,2,'MAR','08:00:00','10:00:00'),(4,2,'JUE','08:00:00','10:00:00'),(5,3,'LUN','14:00:00','16:00:00'),(6,3,'MIE','14:00:00','16:00:00'),(7,4,'VIE','16:00:00','18:00:00'),(8,5,'MAR','06:00:00','08:00:00'),(9,5,'JUE','06:00:00','08:00:00'),(10,6,'LUN','08:00:00','10:00:00'),(11,6,'MIE','10:00:00','12:00:00'),(12,7,'LUN','07:00:00','09:00:00'),(13,7,'MIE','07:00:00','09:00:00'),(14,8,'MAR','09:00:00','11:00:00'),(15,8,'JUE','09:00:00','11:00:00'),(16,9,'LUN','11:00:00','13:00:00'),(17,9,'MIE','11:00:00','13:00:00'),(18,10,'MAR','14:00:00','16:00:00'),(19,10,'JUE','14:00:00','16:00:00'),(20,11,'LUN','14:00:00','16:00:00'),(21,11,'MIE','14:00:00','16:00:00'),(22,12,'MAR','16:00:00','18:00:00'),(23,12,'JUE','16:00:00','18:00:00'),(24,13,'VIE','07:00:00','11:00:00'),(25,14,'LUN','16:00:00','18:00:00'),(26,14,'MIE','16:00:00','18:00:00'),(27,15,'MAR','07:00:00','09:00:00'),(28,15,'JUE','07:00:00','09:00:00'),(29,16,'LUN','09:00:00','11:00:00'),(30,16,'MIE','09:00:00','11:00:00'),(31,17,'MAR','11:00:00','13:00:00'),(32,17,'JUE','11:00:00','13:00:00'),(33,18,'VIE','09:00:00','11:00:00'),(34,19,'VIE','11:00:00','13:00:00'),(35,20,'MAR','07:00:00','09:00:00'),(36,20,'VIE','07:00:00','09:00:00'),(37,21,'LUN','07:00:00','09:00:00'),(38,21,'MIE','07:00:00','09:00:00'),(39,22,'MAR','14:00:00','18:00:00'),(40,22,'JUE','14:00:00','18:00:00'),(41,23,'SAB','07:00:00','10:00:00'),(42,24,'LUN','09:00:00','11:00:00'),(43,24,'JUE','09:00:00','11:00:00'),(44,25,'MAR','09:00:00','11:00:00'),(45,25,'VIE','09:00:00','11:00:00'),(46,26,'LUN','11:00:00','13:00:00'),(47,26,'MIE','11:00:00','13:00:00'),(48,27,'MAR','16:00:00','18:00:00'),(49,27,'JUE','16:00:00','18:00:00'),(50,28,'MAR','14:00:00','16:00:00'),(51,28,'JUE','14:00:00','16:00:00'),(52,29,'LUN','14:00:00','16:00:00'),(53,29,'MIE','14:00:00','16:00:00'),(54,29,'VIE','14:00:00','16:00:00'),(55,30,'MAR','16:00:00','18:00:00'),(56,30,'JUE','16:00:00','18:00:00'),(57,31,'VIE','16:00:00','18:00:00'),(58,32,'SAB','07:00:00','09:00:00'),(59,33,'LUN','16:00:00','18:00:00'),(60,33,'MIE','16:00:00','18:00:00'),(61,34,'MAR','16:00:00','18:00:00'),(62,34,'JUE','16:00:00','18:00:00');
-/*!40000 ALTER TABLE `horarios` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `inscripciones`
---
-
+-- ──────────────────────────────────────────────
+--  INSCRIPCIONES  (semestre actual de Juan)
+-- ──────────────────────────────────────────────
 DROP TABLE IF EXISTS `inscripciones`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inscripciones` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `estudiante_id` int NOT NULL,
-  `materia_id` int NOT NULL,
-  `fecha_inscripcion` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` enum('inscrita','cancelada') COLLATE utf8mb4_unicode_ci DEFAULT 'inscrita',
+  `id`                INT NOT NULL AUTO_INCREMENT,
+  `estudiante_id`     INT NOT NULL,
+  `materia_id`        INT NOT NULL,
+  `fecha_inscripcion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `estado`            ENUM('inscrita','cancelada') DEFAULT 'inscrita',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unica_inscripcion` (`estudiante_id`,`materia_id`),
-  KEY `materia_id` (`materia_id`),
-  CONSTRAINT `inscripciones_ibfk_1` FOREIGN KEY (`estudiante_id`) REFERENCES `estudiantes` (`id`),
-  CONSTRAINT `inscripciones_ibfk_2` FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  FOREIGN KEY (`estudiante_id`) REFERENCES `estudiantes`(`id`),
+  FOREIGN KEY (`materia_id`)    REFERENCES `materias`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `inscripciones`
---
+-- Juan Pérez ya inscribió 2 materias del semestre 6
+INSERT INTO `inscripciones` (`estudiante_id`,`materia_id`,`estado`) VALUES
+(1,27,'inscrita'),
+(1,28,'inscrita');
 
-LOCK TABLES `inscripciones` WRITE;
-/*!40000 ALTER TABLE `inscripciones` DISABLE KEYS */;
-INSERT INTO `inscripciones` VALUES (1,1,3,'2026-05-23 15:18:29','inscrita'),(2,1,4,'2026-05-23 15:18:29','inscrita'),(3,1,6,'2026-05-25 16:50:08','inscrita'),(4,1,1,'2026-05-25 16:50:19','inscrita'),(5,1,5,'2026-05-25 16:50:20','inscrita');
-/*!40000 ALTER TABLE `inscripciones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `materias`
---
-
-DROP TABLE IF EXISTS `materias`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `materias` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombre` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `creditos` int NOT NULL,
-  `semestre_plan` int NOT NULL,
-  `cupos_total` int NOT NULL DEFAULT '30',
-  `cupos_usados` int NOT NULL DEFAULT '0',
-  `docente` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Por asignar',
-  `salon` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Por asignar',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `cupos_restantes` int NOT NULL DEFAULT '30',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `codigo` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `materias`
---
-
-LOCK TABLES `materias` WRITE;
-/*!40000 ALTER TABLE `materias` DISABLE KEYS */;
-INSERT INTO `materias` VALUES (1,'IS-601','Redes de Computadores',3,6,30,0,'Ing. Ricardo Mora','Sala Sistemas - PM','2026-05-23 15:18:29',30),(2,'IS-602','Sistemas Operativos',3,6,30,30,'Ing. Carlos López','Sala B - 204','2026-05-23 15:18:29',0),(3,'IS-603','Ingeniería de Software II',4,6,25,24,'Dr. Roberto Sánchez','Aula A - 302','2026-05-23 15:18:29',1),(4,'IS-604','Ética Profesional',2,6,20,5,'Dr. María Valdivieso','Virtual - Teams','2026-05-23 15:18:29',15),(5,'IS-605','Algoritmos y Estructuras',4,6,28,28,'Dra. Elena Gómez','Lab. C - 104','2026-05-23 15:18:29',0),(6,'IS-606','Base de Datos II',4,5,30,29,'Ing. Laura Ruiz','Lab. B - 201','2026-05-23 15:18:29',1),(7,'TDS-101','Fundamentos de Programación',3,1,30,5,'Luz Karime Castellanos Joya','Lab. B-101','2026-05-26 19:46:02',25),(8,'TDS-201','Programación Orientada a Objetos',3,2,28,8,'Luz Karime Castellanos Joya','Lab. B-102','2026-05-26 19:46:02',20),(9,'TDS-301','Diseño de Web Services',3,3,30,12,'Luz Karime Castellanos Joya','Lab. B-201','2026-05-26 19:46:02',18),(10,'TDS-302','Desarrollo de Apps Móviles',3,3,25,6,'Jorge Iván Ramírez López','Lab. B-203','2026-05-26 19:46:02',19),(11,'TDS-401','Arquitectura de Software',3,4,30,10,'Luz Karime Castellanos Joya','Aula A-105','2026-05-26 19:46:02',20),(12,'TDS-402','Pruebas y Calidad de Software',3,4,28,4,'Andrés Camilo Peña Silva','Aula B-301','2026-05-26 19:46:02',24),(13,'TDS-501','Proyecto de Grado I',4,5,20,3,'Luz Karime Castellanos Joya','Sala Reuniones','2026-05-26 19:46:02',17),(14,'TDS-502','Inteligencia Artificial Aplicada',3,5,25,7,'Sandra Patricia Leal Mora','Lab. B-204','2026-05-26 19:46:02',18),(15,'TSI-201','Bases de Datos II',3,2,30,10,'Carlos Hernán Morales Gil','Lab. C-101','2026-05-26 19:46:02',20),(16,'TSI-301','Redes y Telecomunicaciones',3,3,28,8,'Pedro Luis Vega Cifuentes','Aula C-203','2026-05-26 19:46:02',20),(17,'TSI-302','Seguridad Informática',3,3,25,11,'Hernando Fonseca Ruiz','Aula C-302','2026-05-26 19:46:02',14),(18,'TSI-401','Infraestructura TI en la Nube',3,4,25,6,'Pedro Luis Vega Cifuentes','Lab. C-401','2026-05-26 19:46:02',19),(19,'TSI-501','Gobierno de TI y COBIT',3,5,20,9,'Marisol Acevedo Quintero','Aula C-501','2026-05-26 19:46:02',11),(20,'TEI-201','Circuitos Eléctricos II',3,2,28,12,'Rafael Gutiérrez Paz','Lab. D-101','2026-05-26 19:46:02',16),(21,'TEI-301','Sistemas Embebidos',3,3,25,16,'Rafael Gutiérrez Paz','Lab. D-201','2026-05-26 19:46:02',9),(22,'TEI-401','Automatización Industrial',4,4,22,15,'Luis Cárdenas Rueda','Lab. D-301','2026-05-26 19:46:02',7),(23,'TEI-501','IoT e Industria 4.0',3,5,20,7,'Luis Cárdenas Rueda','Lab. D-401','2026-05-26 19:46:02',13),(24,'TGE-101','Fundamentos de Administración',3,1,35,10,'Gloria Niño Vargas','Aula E-101','2026-05-26 19:46:02',25),(25,'TGE-201','Contabilidad Financiera',3,2,32,14,'Gloria Niño Vargas','Aula E-201','2026-05-26 19:46:02',18),(26,'TGE-301','Gestión de Proyectos',3,3,30,18,'Beatriz Suárez Cano','Aula E-301','2026-05-26 19:46:02',12),(27,'TGE-401','Mercadeo Digital',3,4,28,8,'Beatriz Suárez Cano','Aula E-401','2026-05-26 19:46:02',20),(28,'GEN-101','Comunicación Oral y Escrita',2,1,40,15,'Martha Lucía Prada Soto','Aula A-101','2026-05-26 19:46:02',25),(29,'GEN-102','Matemáticas Fundamentales',4,1,38,20,'Jaime Rodríguez Cruz','Aula A-201','2026-05-26 19:46:02',18),(30,'GEN-201','Estadística Básica',3,2,35,17,'Jaime Rodríguez Cruz','Aula A-202','2026-05-26 19:46:02',18),(31,'GEN-202','Ética Profesional',2,2,40,12,'Claudia Rangel Vera','Aula A-301','2026-05-26 19:46:02',28),(32,'GEN-301','Constitución y Democracia',2,3,40,5,'Claudia Rangel Vera','Aula A-302','2026-05-26 19:46:02',35),(33,'GEN-401','Inglés Técnico I',3,4,30,15,'Diana Patiño Ibáñez','Aula A-401','2026-05-26 19:46:02',15),(34,'GEN-501','Inglés Técnico II',3,5,28,8,'Diana Patiño Ibáñez','Aula A-402','2026-05-26 19:46:02',20);
-/*!40000 ALTER TABLE `materias` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-05-26 14:46:25
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
